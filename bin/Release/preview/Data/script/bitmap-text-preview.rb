@@ -17,12 +17,40 @@ class BitmapTextPreview
 		@my_align_v = 0
 	end
 
-	def self.get_text_rect(font, str)
+	def self.get_text_rect(font, text)
 		bitmap = Bitmap.new(1, 1)
 		bitmap.font = font
-		rect = bitmap.text_size(str)
+		rect = bitmap.text_size(text)
 		bitmap.dispose
 		return [rect.width, rect.height]
+	end
+
+	def self.get_arr_text_rect(font, arr_text)
+		res = []
+		for text in arr_text
+			r = self.get_text_rect(font, text)
+			res.push(r[0])
+			res.push(r[1])
+		end
+		return res
+	end
+
+	def get_arr_y(arr_text)
+		arr_y = []
+		y = case @my_align_v
+		when 0
+			0
+		when 1
+			(height - @my_bitmap.font.size * arr_text.size) / 2
+		when 2
+			height - @my_bitmap.font.size * arr_text.size
+		end
+		h = @my_bitmap.font.size
+		arr_text.size.times do |i|
+			arr_y.push(y)
+			y += h
+		end
+		return arr_y
 	end
 
 	def self.create_font_object(name, size, bold, italic)
@@ -33,7 +61,7 @@ class BitmapTextPreview
 		return font
 	end
 
-	def create_bitmap(width, height, arr_str)
+	def create_bitmap(width, height, arr_text)
 		@my_bitmap.dispose unless @my_bitmap.disposed?
 		return if width == 0 || height == 0
 		@my_bitmap = Bitmap.new(width, height)
@@ -42,13 +70,13 @@ class BitmapTextPreview
 		when 0
 			0
 		when 1
-			(height - @my_bitmap.font.size * arr_str.size) / 2
+			(height - @my_bitmap.font.size * arr_text.size) / 2
 		when 2
-			height - @my_bitmap.font.size * arr_str.size
+			height - @my_bitmap.font.size * arr_text.size
 		end
 		h = @my_bitmap.font.size
-		for str in arr_str
-			@my_bitmap.draw_text(0, y, width + 1, h, str, @my_align_h)
+		for text in arr_text
+			@my_bitmap.draw_text(0, y, width + 1, h, text, @my_align_h)
 			y += h
 		end
 		@my_sprite.bitmap = @my_bitmap

@@ -54,7 +54,11 @@ module Json
     array.each {|i|
       string += self.encode(i).to_s + ","
     }
-    string[string.size - 1, 1] = "]"
+    if string == '['
+      string += ']'
+    else
+      string[string.size - 1, 1] = "]"
+    end
     return string
   end
   

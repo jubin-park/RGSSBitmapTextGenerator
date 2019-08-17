@@ -16,6 +16,8 @@ namespace RGSSBitmapTextGenerator
     public partial class FormMain : Form
     {
         public static IntPtr hSlotEditor = IntPtr.Zero;
+        public static string varBitmapName = "my_bmp";
+        public static string varFontName = "my_font";
 
         public FormMain()
         {
@@ -76,17 +78,6 @@ namespace RGSSBitmapTextGenerator
                 SendBackgroundRGBColor();
             }
         }
-
-        private void Button4_Click(object sender, EventArgs e)
-        {
-            SendBitmapRect();
-            JObject jsonObj = ReceivePacket();
-            if (jsonObj == null)
-            {
-                return;
-            }
-        }
-
         private void ButtonDraw_Click(object sender, EventArgs e)
         {
             SendText();
@@ -159,7 +150,7 @@ namespace RGSSBitmapTextGenerator
         private void LinkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Clipboard.SetText(linkLabel1.Text);
-            MessageBox.Show($"글꼴 이름을 클립보드로 복사했습니다.", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show($"글꼴 이름을 클립보드로 복사했습니다.\nCtrl+V 를 눌러 붙여넣으세요.", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void LinkLabelFontColor_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -170,7 +161,7 @@ namespace RGSSBitmapTextGenerator
                 s += $", {numericUpDownAlpha.Value}";
             }
             Clipboard.SetText(s);
-            MessageBox.Show($"색상값을 클립보드로 복사했습니다.", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show($"색상값을 클립보드로 복사했습니다.\nCtrl+V 를 눌러 붙여넣으세요.", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void NumericUpDownAlpha_ValueChanged(object sender, EventArgs e)
@@ -305,12 +296,113 @@ namespace RGSSBitmapTextGenerator
             SendPacket(jsonObj);
         }
 
-        private void SendBitmapRect()
+        private void SendBitmapRectRequest()
         {
             JObject jsonObj = new JObject();
             jsonObj.Add("no", 11);
             jsonObj.Add("text", textBoxText.Text);
             SendPacket(jsonObj);
+        }
+
+        private void ButtonExtractScript_Click(object sender, EventArgs e)
+        {
+            SendBitmapRectRequest();
+            JObject jsonObj = ReceivePacket();
+            if (jsonObj == null)
+            {
+                return;
+            }
+            if ((int)jsonObj["no"] != 11)
+            {
+                return;
+            }
+            varFontName = Microsoft.VisualBasic.Interaction.InputBox("폰트 변수명을 입력하세요.", this.Text, varFontName);
+            varBitmapName = Microsoft.VisualBasic.Interaction.InputBox("비트맵 변수명을 입력하세요.", this.Text, varBitmapName);
+
+            string sName = $@"""{fontDialogInfo.Font.Name}""";
+            string sSize = $"{Convert.ToInt32(fontDialogInfo.Font.Size + 0.5f)}";
+            string sBold = $"{fontDialogInfo.Font.Bold.ToString().ToLower()}";
+            string sItalic = $"{fontDialogInfo.Font.Italic.ToString().ToLower()}";
+            string sColor = $"({colorDialogFont.Color.R}, {colorDialogFont.Color.G}, {colorDialogFont.Color.B}";
+            if (numericUpDownAlpha.Value < 255)
+            {
+                sColor += $", {numericUpDownAlpha.Value}";
+            }
+            sColor += ")";
+
+            int intSize = (int)jsonObj["size"];
+            int intWidth = (int)jsonObj["width"];
+            int intHeight = (int)jsonObj["height"];
+            int intAlign = (int)jsonObj["align_h"];
+
+            string sDefaultFont = $@"# 기본 폰트
+Font.default_name = {sName}
+Font.default_size = {sSize}
+Font.default_bold = {sBold}
+Font.default_italic = {sItalic}
+Font.default_color.set{sColor}
+
+";
+            string sObjectFont = $@"# 폰트 개체
+{varFontName} = Font.new
+{varFontName}.name = {sName}
+{varFontName}.size = {sSize}
+{varFontName}.bold = {sBold}
+{varFontName}.italic = {sItalic}
+{varFontName}.color.set{sColor}
+
+";
+            string sBitmap1 = $@"# 비트맵 (폰트 개체 사용)
+{varBitmapName} = Bitmap.new({intWidth}, {intHeight})
+{varBitmapName}.font = {varFontName}
+
+";
+            string sBitmap2 = $@"# 비트맵
+{varBitmapName} = Bitmap.new({intWidth}, {intHeight})
+{varBitmapName}.font.name = {sName}
+{varBitmapName}.font.size = {sSize}
+{varBitmapName}.font.bold = {sBold}
+{varBitmapName}.font.italic = {sItalic}
+{varBitmapName}.font.color.set{sColor}
+
+";
+            string sDrawText = "";
+            string sTextLength = "";
+            if (intSize > 0)
+            {
+                JArray jArrayY = JArray.Parse(jsonObj["arr_y"].ToString());
+                JArray jArrayRect = JArray.Parse(jsonObj["arr_rect"].ToString());
+                string[] sStr = textBoxText.Text.Split(new string[] { "\r\n" }, StringSplitOptions.None);//.Replace("\r\n", "\n").Split('\n');
+
+                sDrawText = "# draw_text 메서드\n";
+                sTextLength = @"# 문자열 길이
+# ""<문자열>""
+# (너비, 높이)
+";
+                for (int i = 0; i < intSize; ++i)
+                {
+                    if (sStr[i] == "")
+                    {
+                        continue;
+                    }
+                    {
+                        string s = $@"{varBitmapName}.draw_text(0, {jArrayY[i]}, {intWidth + 1}, {intHeight}, ""{sStr[i]}""";
+                        if (intAlign != 0)
+                        {
+                            s += $", {intAlign}";
+                        }
+                        s += ")\n";
+                        sDrawText += s;
+                    }
+                    {
+                        string s = "\n" + $@"""{sStr[i]}""" + "\n" + $@"({jArrayRect[i * 2]}, {jArrayRect[i * 2 + 1]})" + "\n";
+                        sTextLength += s;
+                    }
+                }
+                sDrawText += "\n";
+            }
+            Clipboard.SetText(sDefaultFont + sObjectFont + sBitmap1 + sBitmap2 + sDrawText + sTextLength);
+            MessageBox.Show("클립보드로 복사되었습니다.\nCtrl+V 를 눌러 붙여넣으세요.", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

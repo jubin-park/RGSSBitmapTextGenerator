@@ -97,7 +97,19 @@ module Mailslot
 			$preview.save_png(recv["file_name"])
 		when 11 # rect request
 			return if $preview.my_bitmap.disposed?
-			Mailslot.send_byte(Json.encode({"no" => 6, "width" => $preview.my_bitmap.width, "height" => $preview.my_bitmap.height}))
+			arr_text = recv["text"].split("\\r\\n")
+			json = Json.encode(
+				{
+					"no" => 11,
+					"arr_y" => $preview.get_arr_y(arr_text),
+					"width" => $preview.my_bitmap.width,
+					"height" => $preview.my_bitmap.height,
+					"align_h" => $preview.my_align_h,
+					"arr_rect" => BitmapTextPreview.get_arr_text_rect($preview.my_font, arr_text),
+					"size" => arr_text.size
+				}
+			)
+			Mailslot.send_byte(json)
 		end
 	end
 end

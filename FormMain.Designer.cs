@@ -32,7 +32,6 @@
             this.buttonChangeFont = new System.Windows.Forms.Button();
             this.textBoxText = new System.Windows.Forms.TextBox();
             this.buttonExecutePreview = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
             this.buttonDraw = new System.Windows.Forms.Button();
             this.colorDialogFont = new System.Windows.Forms.ColorDialog();
             this.buttonFontColor = new System.Windows.Forms.Button();
@@ -63,6 +62,7 @@
             this.numericUpDownWidth = new System.Windows.Forms.NumericUpDown();
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
+            this.buttonExtractScript = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownAlpha)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -85,7 +85,7 @@
             // buttonChangeFont
             // 
             this.buttonChangeFont.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.buttonChangeFont.Location = new System.Drawing.Point(151, 52);
+            this.buttonChangeFont.Location = new System.Drawing.Point(151, 57);
             this.buttonChangeFont.Name = "buttonChangeFont";
             this.buttonChangeFont.Size = new System.Drawing.Size(60, 39);
             this.buttonChangeFont.TabIndex = 4;
@@ -107,22 +107,11 @@
             // 
             this.buttonExecutePreview.Location = new System.Drawing.Point(12, 462);
             this.buttonExecutePreview.Name = "buttonExecutePreview";
-            this.buttonExecutePreview.Size = new System.Drawing.Size(217, 37);
+            this.buttonExecutePreview.Size = new System.Drawing.Size(103, 36);
             this.buttonExecutePreview.TabIndex = 3;
             this.buttonExecutePreview.Text = "미리보기 실행";
             this.buttonExecutePreview.UseVisualStyleBackColor = true;
             this.buttonExecutePreview.Click += new System.EventHandler(this.ButtonExecutePreview_Click);
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(127, 17);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
-            this.button4.TabIndex = 4;
-            this.button4.Text = "GetBuffer";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Visible = false;
-            this.button4.Click += new System.EventHandler(this.Button4_Click);
             // 
             // buttonDraw
             // 
@@ -158,7 +147,6 @@
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.button4);
             this.groupBox1.Controls.Add(this.buttonChangeFont);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
@@ -463,11 +451,22 @@
             this.label9.TabIndex = 18;
             this.label9.Text = "너비";
             // 
+            // buttonExtractScript
+            // 
+            this.buttonExtractScript.Location = new System.Drawing.Point(121, 462);
+            this.buttonExtractScript.Name = "buttonExtractScript";
+            this.buttonExtractScript.Size = new System.Drawing.Size(108, 36);
+            this.buttonExtractScript.TabIndex = 22;
+            this.buttonExtractScript.Text = "스크립트로 추출";
+            this.buttonExtractScript.UseVisualStyleBackColor = true;
+            this.buttonExtractScript.Click += new System.EventHandler(this.ButtonExtractScript_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(240, 509);
+            this.Controls.Add(this.buttonExtractScript);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.buttonSaveAsPNG);
@@ -502,7 +501,6 @@
         private System.Windows.Forms.Button buttonChangeFont;
         private System.Windows.Forms.TextBox textBoxText;
         private System.Windows.Forms.Button buttonExecutePreview;
-        private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button buttonDraw;
         protected System.Windows.Forms.FontDialog fontDialogInfo;
         private System.Windows.Forms.ColorDialog colorDialogFont;
@@ -534,6 +532,7 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.NumericUpDown numericUpDownHeight;
         private System.Windows.Forms.NumericUpDown numericUpDownWidth;
+        private System.Windows.Forms.Button buttonExtractScript;
     }
 }
 
