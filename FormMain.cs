@@ -15,20 +15,51 @@ namespace RGSSBitmapTextGenerator
 {
     public partial class FormMain : Form
     {
-        public static IntPtr hSlotForm = IntPtr.Zero;
+        public static IntPtr hSlotEditor = IntPtr.Zero;
 
         public FormMain()
         {
             InitializeComponent();
+            hSlotEditor = Win32.CreateMailslot(Win32.MailSlotNameEditor, 0, Win32.MAILSLOT_WAIT_FOREVER, IntPtr.Zero);
+            if (hSlotEditor == (IntPtr)(Win32.INVALID_HANDLE_VALUE))
+            {
+                MessageBox.Show("메일슬롯 생성 실패", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                Win32.CloseHandle(hSlotEditor);
+                this.Close();
+                return;
+            }
+            numericUpDownAlpha.MouseWheel += new MouseEventHandler(Disable_MouseWheel);
+            numericUpDownWidth.MouseWheel += new MouseEventHandler(Disable_MouseWheel);
+            numericUpDownHeight.MouseWheel += new MouseEventHandler(Disable_MouseWheel);
+            comboBoxAlignHorizontal.MouseWheel += new MouseEventHandler(Disable_MouseWheel);
+            comboBoxAlignVertical.MouseWheel += new MouseEventHandler(Disable_MouseWheel);
+            linkLabel1.Text = fontDialogInfo.Font.Name;
+            linkLabelFontColor.Text = $"{colorDialogFont.Color.R}, {colorDialogFont.Color.G}, {colorDialogFont.Color.B}";
+            label5.Text = Convert.ToInt32(fontDialogInfo.Font.Size + 0.5).ToString();
+            label6.Text = "보통";
+            comboBoxAlignHorizontal.SelectedIndex = 0;
+            comboBoxAlignVertical.SelectedIndex = 0;
+            groupBox4.Enabled = false;
         }
 
-        private void FontDialog1_Apply(object sender, EventArgs e)
+        private void FormMain_Load(object sender, EventArgs e)
         {
-            SendFontSpec();
-            SendText();
+            ButtonExecutePreview_Click(sender, e);
         }
 
-        private void Button2_Click(object sender, EventArgs e)
+        private void ButtonSaveAsPNG_Click(object sender, EventArgs e)
+        {
+            saveFileDialogPNG.Title = "png 파일로 저장";
+            saveFileDialogPNG.OverwritePrompt = true;
+            saveFileDialogPNG.Filter = "PNG Image|*.png";
+            if (saveFileDialogPNG.ShowDialog() == DialogResult.OK)
+            {
+                Packet010(saveFileDialogPNG.FileName);
+                saveFileDialogPNG.FileName = System.IO.Path.GetFileName(saveFileDialogPNG.FileName);
+            }
+        }
+
+        private void ButtonExecutePreview_Click(object sender, EventArgs e)
         {
             ProcessStartInfo psi = new ProcessStartInfo();
             psi.Verb = "open";
@@ -36,6 +67,14 @@ namespace RGSSBitmapTextGenerator
             psi.Arguments = $"{this.Handle}";
             psi.UseShellExecute = true;
             Process.Start(psi);
+        }
+
+        private void ButtonBackgroundColor_Click(object sender, EventArgs e)
+        {
+            if (colorDialogBackground.ShowDialog() == DialogResult.OK)
+            {
+                SendBackgroundRGBColor();
+            }
         }
 
         private void Button4_Click(object sender, EventArgs e)
@@ -48,36 +87,29 @@ namespace RGSSBitmapTextGenerator
             }
         }
 
-        private void TextboxText_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-            }
-        }
-
         private void ButtonDraw_Click(object sender, EventArgs e)
         {
             SendText();
             SendFontAColor();
         }
 
-        private void ButtonFont_Click(object sender, EventArgs e)
+        private void ButtonChangeFont_Click(object sender, EventArgs e)
         {
-            if (fontDialog1.ShowDialog() != DialogResult.Cancel)
+            if (fontDialogInfo.ShowDialog() != DialogResult.Cancel)
             {
-                linkLabel1.Text = fontDialog1.Font.Name;
-                label5.Text = Convert.ToInt32(fontDialog1.Font.Size + 0.5).ToString();
-                if (fontDialog1.Font.Bold && fontDialog1.Font.Italic)
+                linkLabel1.Text = fontDialogInfo.Font.Name;
+                label5.Text = Convert.ToInt32(fontDialogInfo.Font.Size + 0.5).ToString();
+                if (fontDialogInfo.Font.Bold && fontDialogInfo.Font.Italic)
                 {
                     label6.Font = new Font(label6.Font, FontStyle.Bold | FontStyle.Italic);
                     label6.Text = "굵은 기울임꼴";
                 }
-                else if (fontDialog1.Font.Bold)
+                else if (fontDialogInfo.Font.Bold)
                 {
                     label6.Font = new Font(label6.Font, FontStyle.Bold);
                     label6.Text = "굵게";
                 }
-                else if (fontDialog1.Font.Italic)
+                else if (fontDialogInfo.Font.Italic)
                 {
                     label6.Font = new Font(label6.Font, FontStyle.Italic);
                     label6.Text = "기울임꼴";
@@ -93,15 +125,35 @@ namespace RGSSBitmapTextGenerator
             }
         }
 
-
-        private void ButtonColor_Click(object sender, EventArgs e)
+        private void ButtonFontColor_Click(object sender, EventArgs e)
         {
-            if (colorDialog1.ShowDialog() == DialogResult.OK)
+            if (colorDialogFont.ShowDialog() == DialogResult.OK)
             {
-                linkLabelFontColor.Text = $"{colorDialog1.Color.R}, {colorDialog1.Color.G}, {colorDialog1.Color.B}";
+                linkLabelFontColor.Text = $"{colorDialogFont.Color.R}, {colorDialogFont.Color.G}, {colorDialogFont.Color.B}";
                 SendFontRGBColor();
                 SendText();
             }
+        }
+
+        private void ComboBoxAlign_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SendAlignHorizontal();
+        }
+
+        private void ComboBoxAlignVertical_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SendAlignVertical();
+        }
+
+        private void CheckBoxFixSize_CheckedChanged(object sender, EventArgs e)
+        {
+            groupBox4.Enabled = checkBoxFixSize.Checked;
+        }
+
+        private void FontDialog1_Apply(object sender, EventArgs e)
+        {
+            SendFontSpec();
+            SendText();
         }
 
         private void LinkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -112,7 +164,7 @@ namespace RGSSBitmapTextGenerator
 
         private void LinkLabelFontColor_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            string s = $"{colorDialog1.Color.R}, {colorDialog1.Color.G}, {colorDialog1.Color.B}";
+            string s = $"{colorDialogFont.Color.R}, {colorDialogFont.Color.G}, {colorDialogFont.Color.B}";
             if (numericUpDownAlpha.Value < 255)
             {
                 s += $", {numericUpDownAlpha.Value}";
@@ -121,48 +173,15 @@ namespace RGSSBitmapTextGenerator
             MessageBox.Show($"색상값을 클립보드로 복사했습니다.", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void Button1_Click(object sender, EventArgs e)
-        {
-            saveFileDialog1.Title = "png 파일로 저장";
-            saveFileDialog1.OverwritePrompt = true;
-            saveFileDialog1.Filter = "PNG Image|*.png";
-            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                Packet010(saveFileDialog1.FileName);
-                saveFileDialog1.FileName = System.IO.Path.GetFileName(saveFileDialog1.FileName);
-            }
-        }
-
         private void NumericUpDownAlpha_ValueChanged(object sender, EventArgs e)
         {
             SendFontAColor();
             SendText();
         }
 
-        private void FormMain_Load(object sender, EventArgs e)
+        private void Disable_MouseWheel(object sender, MouseEventArgs e)
         {
-            hSlotForm = Win32.CreateMailslot(Win32.MailSlotNameEditor, 0, Win32.MAILSLOT_WAIT_FOREVER, IntPtr.Zero);
-            if (hSlotForm == (IntPtr)(Win32.INVALID_HANDLE_VALUE))
-            {
-                MessageBox.Show("메일슬롯 생성 실패", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                Win32.CloseHandle(hSlotForm);
-                this.Close();
-                return;
-            }
-            textBoxText.KeyDown += new KeyEventHandler(this.TextboxText_KeyDown);
-            this.Closing += new CancelEventHandler(FormMain_Closing);
-            linkLabel1.Text = fontDialog1.Font.Name;
-            linkLabelFontColor.Text = $"{colorDialog1.Color.R}, {colorDialog1.Color.G}, {colorDialog1.Color.B}";
-            label5.Text = Convert.ToInt32(fontDialog1.Font.Size + 0.5).ToString();
-            label6.Text = "보통";
-            comboBoxAlignHorizontal.SelectedIndex = 0;
-            comboBoxAlignVertical.SelectedIndex = 0;
-            groupBox4.Enabled = false;
-            Button2_Click(sender, e);
-        }
-
-        private void FormMain_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
+            ((HandledMouseEventArgs)e).Handled = true;
         }
 
         private JObject ReceivePacket()
@@ -171,7 +190,7 @@ namespace RGSSBitmapTextGenerator
             uint messageSize = 0;
             while (true)
             {
-                Win32.GetMailslotInfo(hSlotForm, IntPtr.Zero, out messageSize, IntPtr.Zero, IntPtr.Zero);
+                Win32.GetMailslotInfo(hSlotEditor, IntPtr.Zero, out messageSize, IntPtr.Zero, IntPtr.Zero);
                 if (messageSize > 0 && messageSize < uint.MaxValue)
                 {
                     break;
@@ -180,7 +199,7 @@ namespace RGSSBitmapTextGenerator
             }
             var buffer = new byte[messageSize];
             uint size = 0;
-            IntPtr hRead = Win32.ReadFile(hSlotForm, buffer, messageSize, out size, IntPtr.Zero);
+            IntPtr hRead = Win32.ReadFile(hSlotEditor, buffer, messageSize, out size, IntPtr.Zero);
             if (hRead == IntPtr.Zero)
             {
                 MessageBox.Show("버퍼 읽기 실패", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -214,10 +233,10 @@ namespace RGSSBitmapTextGenerator
         {
             JObject jsonObj = new JObject();
             jsonObj.Add("no", 1);
-            jsonObj.Add("font_name", fontDialog1.Font.Name);
-            jsonObj.Add("font_size", Convert.ToInt32(fontDialog1.Font.Size + 0.5f));
-            jsonObj.Add("font_bold", fontDialog1.Font.Bold);
-            jsonObj.Add("font_italic", fontDialog1.Font.Italic);
+            jsonObj.Add("font_name", fontDialogInfo.Font.Name);
+            jsonObj.Add("font_size", Convert.ToInt32(fontDialogInfo.Font.Size + 0.5f));
+            jsonObj.Add("font_bold", fontDialogInfo.Font.Bold);
+            jsonObj.Add("font_italic", fontDialogInfo.Font.Italic);
             SendPacket(jsonObj);
         }
 
@@ -239,9 +258,9 @@ namespace RGSSBitmapTextGenerator
         {
             JObject jsonObj = new JObject();
             jsonObj.Add("no", 3);
-            jsonObj.Add("r", colorDialog1.Color.R);
-            jsonObj.Add("g", colorDialog1.Color.G);
-            jsonObj.Add("b", colorDialog1.Color.B);
+            jsonObj.Add("r", colorDialogFont.Color.R);
+            jsonObj.Add("g", colorDialogFont.Color.G);
+            jsonObj.Add("b", colorDialogFont.Color.B);
             SendPacket(jsonObj);
         }
 
@@ -272,9 +291,9 @@ namespace RGSSBitmapTextGenerator
         {
             JObject jsonObj = new JObject();
             jsonObj.Add("no", 7);
-            jsonObj.Add("r", colorDialog2.Color.R);
-            jsonObj.Add("g", colorDialog2.Color.G);
-            jsonObj.Add("b", colorDialog2.Color.B);
+            jsonObj.Add("r", colorDialogBackground.Color.R);
+            jsonObj.Add("g", colorDialogBackground.Color.G);
+            jsonObj.Add("b", colorDialogBackground.Color.B);
             SendPacket(jsonObj);
         }
 
@@ -292,29 +311,6 @@ namespace RGSSBitmapTextGenerator
             jsonObj.Add("no", 11);
             jsonObj.Add("text", textBoxText.Text);
             SendPacket(jsonObj);
-        }
-
-        private void ComboBoxAlign_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            SendAlignHorizontal();
-        }
-
-        private void ComboBoxAlignVertical_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            SendAlignVertical();
-        }
-
-        private void Button3_Click(object sender, EventArgs e)
-        {
-            if (colorDialog2.ShowDialog() == DialogResult.OK)
-            {
-                SendBackgroundRGBColor();
-            }
-        }
-
-        private void checkBoxFixSize_CheckedChanged(object sender, EventArgs e)
-        {
-            groupBox4.Enabled = checkBoxFixSize.Checked;
         }
     }
 }

@@ -28,14 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.fontDialog1 = new System.Windows.Forms.FontDialog();
-            this.buttonFont = new System.Windows.Forms.Button();
+            this.fontDialogInfo = new System.Windows.Forms.FontDialog();
+            this.buttonChangeFont = new System.Windows.Forms.Button();
             this.textBoxText = new System.Windows.Forms.TextBox();
-            this.button2 = new System.Windows.Forms.Button();
+            this.buttonExecutePreview = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.buttonDraw = new System.Windows.Forms.Button();
-            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.buttonColor = new System.Windows.Forms.Button();
+            this.colorDialogFont = new System.Windows.Forms.ColorDialog();
+            this.buttonFontColor = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.label5 = new System.Windows.Forms.Label();
@@ -47,10 +47,10 @@
             this.comboBoxAlignHorizontal = new System.Windows.Forms.ComboBox();
             this.numericUpDownAlpha = new System.Windows.Forms.NumericUpDown();
             this.label4 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.button3 = new System.Windows.Forms.Button();
-            this.colorDialog2 = new System.Windows.Forms.ColorDialog();
+            this.buttonSaveAsPNG = new System.Windows.Forms.Button();
+            this.saveFileDialogPNG = new System.Windows.Forms.SaveFileDialog();
+            this.buttonBackgroundColor = new System.Windows.Forms.Button();
+            this.colorDialogBackground = new System.Windows.Forms.ColorDialog();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label8 = new System.Windows.Forms.Label();
             this.linkLabelFontColor = new System.Windows.Forms.LinkLabel();
@@ -72,26 +72,26 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWidth)).BeginInit();
             this.SuspendLayout();
             // 
-            // fontDialog1
+            // fontDialogInfo
             // 
-            this.fontDialog1.AllowVerticalFonts = false;
-            this.fontDialog1.Font = new System.Drawing.Font("돋움", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.fontDialog1.FontMustExist = true;
-            this.fontDialog1.MaxSize = 96;
-            this.fontDialog1.ShowApply = true;
-            this.fontDialog1.ShowEffects = false;
-            this.fontDialog1.Apply += new System.EventHandler(this.FontDialog1_Apply);
+            this.fontDialogInfo.AllowVerticalFonts = false;
+            this.fontDialogInfo.Font = new System.Drawing.Font("돋움", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.fontDialogInfo.FontMustExist = true;
+            this.fontDialogInfo.MaxSize = 96;
+            this.fontDialogInfo.ShowApply = true;
+            this.fontDialogInfo.ShowEffects = false;
+            this.fontDialogInfo.Apply += new System.EventHandler(this.FontDialog1_Apply);
             // 
-            // buttonFont
+            // buttonChangeFont
             // 
-            this.buttonFont.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.buttonFont.Location = new System.Drawing.Point(151, 52);
-            this.buttonFont.Name = "buttonFont";
-            this.buttonFont.Size = new System.Drawing.Size(60, 39);
-            this.buttonFont.TabIndex = 4;
-            this.buttonFont.Text = "변경";
-            this.buttonFont.UseVisualStyleBackColor = true;
-            this.buttonFont.Click += new System.EventHandler(this.ButtonFont_Click);
+            this.buttonChangeFont.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.buttonChangeFont.Location = new System.Drawing.Point(151, 52);
+            this.buttonChangeFont.Name = "buttonChangeFont";
+            this.buttonChangeFont.Size = new System.Drawing.Size(60, 39);
+            this.buttonChangeFont.TabIndex = 4;
+            this.buttonChangeFont.Text = "변경";
+            this.buttonChangeFont.UseVisualStyleBackColor = true;
+            this.buttonChangeFont.Click += new System.EventHandler(this.ButtonChangeFont_Click);
             // 
             // textBoxText
             // 
@@ -103,15 +103,15 @@
             this.textBoxText.TabIndex = 0;
             this.textBoxText.Text = "Hello World !";
             // 
-            // button2
+            // buttonExecutePreview
             // 
-            this.button2.Location = new System.Drawing.Point(12, 462);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(217, 37);
-            this.button2.TabIndex = 3;
-            this.button2.Text = "미리보기 실행";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.Button2_Click);
+            this.buttonExecutePreview.Location = new System.Drawing.Point(12, 462);
+            this.buttonExecutePreview.Name = "buttonExecutePreview";
+            this.buttonExecutePreview.Size = new System.Drawing.Size(217, 37);
+            this.buttonExecutePreview.TabIndex = 3;
+            this.buttonExecutePreview.Text = "미리보기 실행";
+            this.buttonExecutePreview.UseVisualStyleBackColor = true;
+            this.buttonExecutePreview.Click += new System.EventHandler(this.ButtonExecutePreview_Click);
             // 
             // button4
             // 
@@ -135,20 +135,20 @@
             this.buttonDraw.UseVisualStyleBackColor = true;
             this.buttonDraw.Click += new System.EventHandler(this.ButtonDraw_Click);
             // 
-            // colorDialog1
+            // colorDialogFont
             // 
-            this.colorDialog1.Color = System.Drawing.Color.White;
-            this.colorDialog1.FullOpen = true;
+            this.colorDialogFont.Color = System.Drawing.Color.White;
+            this.colorDialogFont.FullOpen = true;
             // 
-            // buttonColor
+            // buttonFontColor
             // 
-            this.buttonColor.Location = new System.Drawing.Point(151, 24);
-            this.buttonColor.Name = "buttonColor";
-            this.buttonColor.Size = new System.Drawing.Size(60, 23);
-            this.buttonColor.TabIndex = 5;
-            this.buttonColor.Text = "글자색";
-            this.buttonColor.UseVisualStyleBackColor = true;
-            this.buttonColor.Click += new System.EventHandler(this.ButtonColor_Click);
+            this.buttonFontColor.Location = new System.Drawing.Point(151, 24);
+            this.buttonFontColor.Name = "buttonFontColor";
+            this.buttonFontColor.Size = new System.Drawing.Size(60, 23);
+            this.buttonFontColor.TabIndex = 5;
+            this.buttonFontColor.Text = "글자색";
+            this.buttonFontColor.UseVisualStyleBackColor = true;
+            this.buttonFontColor.Click += new System.EventHandler(this.ButtonFontColor_Click);
             // 
             // groupBox1
             // 
@@ -159,7 +159,7 @@
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.button4);
-            this.groupBox1.Controls.Add(this.buttonFont);
+            this.groupBox1.Controls.Add(this.buttonChangeFont);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(217, 102);
@@ -275,36 +275,36 @@
             this.label4.TabIndex = 18;
             this.label4.Text = "Alpha";
             // 
-            // button1
+            // buttonSaveAsPNG
             // 
-            this.button1.Location = new System.Drawing.Point(121, 420);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(108, 36);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "png 파일로 저장";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.Button1_Click);
+            this.buttonSaveAsPNG.Location = new System.Drawing.Point(121, 420);
+            this.buttonSaveAsPNG.Name = "buttonSaveAsPNG";
+            this.buttonSaveAsPNG.Size = new System.Drawing.Size(108, 36);
+            this.buttonSaveAsPNG.TabIndex = 2;
+            this.buttonSaveAsPNG.Text = "png 파일로 저장";
+            this.buttonSaveAsPNG.UseVisualStyleBackColor = true;
+            this.buttonSaveAsPNG.Click += new System.EventHandler(this.ButtonSaveAsPNG_Click);
             // 
-            // button3
+            // buttonBackgroundColor
             // 
-            this.button3.Location = new System.Drawing.Point(151, 53);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(60, 23);
-            this.button3.TabIndex = 7;
-            this.button3.Text = "배경색";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.Button3_Click);
+            this.buttonBackgroundColor.Location = new System.Drawing.Point(151, 53);
+            this.buttonBackgroundColor.Name = "buttonBackgroundColor";
+            this.buttonBackgroundColor.Size = new System.Drawing.Size(60, 23);
+            this.buttonBackgroundColor.TabIndex = 7;
+            this.buttonBackgroundColor.Text = "배경색";
+            this.buttonBackgroundColor.UseVisualStyleBackColor = true;
+            this.buttonBackgroundColor.Click += new System.EventHandler(this.ButtonBackgroundColor_Click);
             // 
-            // colorDialog2
+            // colorDialogBackground
             // 
-            this.colorDialog2.FullOpen = true;
+            this.colorDialogBackground.FullOpen = true;
             // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.label8);
             this.groupBox2.Controls.Add(this.linkLabelFontColor);
-            this.groupBox2.Controls.Add(this.button3);
-            this.groupBox2.Controls.Add(this.buttonColor);
+            this.groupBox2.Controls.Add(this.buttonBackgroundColor);
+            this.groupBox2.Controls.Add(this.buttonFontColor);
             this.groupBox2.Controls.Add(this.numericUpDownAlpha);
             this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Location = new System.Drawing.Point(12, 120);
@@ -384,7 +384,7 @@
             this.checkBoxFixSize.TabIndex = 8;
             this.checkBoxFixSize.Text = "비트맵 크기 고정";
             this.checkBoxFixSize.UseVisualStyleBackColor = true;
-            this.checkBoxFixSize.CheckedChanged += new System.EventHandler(this.checkBoxFixSize_CheckedChanged);
+            this.checkBoxFixSize.CheckedChanged += new System.EventHandler(this.CheckBoxFixSize_CheckedChanged);
             // 
             // groupBox4
             // 
@@ -470,10 +470,10 @@
             this.ClientSize = new System.Drawing.Size(240, 509);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.buttonSaveAsPNG);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.buttonDraw);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.buttonExecutePreview);
             this.Controls.Add(this.textBoxText);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -499,14 +499,14 @@
         }
 
         #endregion
-        private System.Windows.Forms.Button buttonFont;
+        private System.Windows.Forms.Button buttonChangeFont;
         private System.Windows.Forms.TextBox textBoxText;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button buttonExecutePreview;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button buttonDraw;
-        protected System.Windows.Forms.FontDialog fontDialog1;
-        private System.Windows.Forms.ColorDialog colorDialog1;
-        private System.Windows.Forms.Button buttonColor;
+        protected System.Windows.Forms.FontDialog fontDialogInfo;
+        private System.Windows.Forms.ColorDialog colorDialogFont;
+        private System.Windows.Forms.Button buttonFontColor;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
@@ -516,12 +516,12 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.LinkLabel linkLabel1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.Button buttonSaveAsPNG;
+        private System.Windows.Forms.SaveFileDialog saveFileDialogPNG;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.NumericUpDown numericUpDownAlpha;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.ColorDialog colorDialog2;
+        private System.Windows.Forms.Button buttonBackgroundColor;
+        private System.Windows.Forms.ColorDialog colorDialogBackground;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.LinkLabel linkLabelFontColor;

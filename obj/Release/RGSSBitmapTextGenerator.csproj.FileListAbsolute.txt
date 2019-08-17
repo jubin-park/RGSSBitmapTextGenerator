@@ -23,3 +23,15 @@ C:\Users\sec\Documents\RGSSBitmapTextGenerator\RGSSBitmapTextGenerator\obj\Relea
 C:\Users\sec\Documents\RGSSBitmapTextGenerator\RGSSBitmapTextGenerator\obj\Release\RGSSBitmapTextGenerator.csproj.CopyComplete
 C:\Users\sec\Documents\RGSSBitmapTextGenerator\RGSSBitmapTextGenerator\obj\Release\RGSSBitmapTextGenerator.exe
 C:\Users\sec\Documents\RGSSBitmapTextGenerator\RGSSBitmapTextGenerator\obj\Release\RGSSBitmapTextGenerator.pdb
+C:\Users\sec\Documents\RGSSBitmapTextGenerator\bin\Release\RGSSBitmapTextGenerator.exe.config
+C:\Users\sec\Documents\RGSSBitmapTextGenerator\bin\Release\RGSSBitmapTextGenerator.exe
+C:\Users\sec\Documents\RGSSBitmapTextGenerator\bin\Release\RGSSBitmapTextGenerator.pdb
+C:\Users\sec\Documents\RGSSBitmapTextGenerator\bin\Release\Newtonsoft.Json.dll
+C:\Users\sec\Documents\RGSSBitmapTextGenerator\bin\Release\Newtonsoft.Json.xml
+C:\Users\sec\Documents\RGSSBitmapTextGenerator\obj\Release\RGSSBitmapTextGenerator.FormMain.resources
+C:\Users\sec\Documents\RGSSBitmapTextGenerator\obj\Release\RGSSBitmapTextGenerator.Properties.Resources.resources
+C:\Users\sec\Documents\RGSSBitmapTextGenerator\obj\Release\RGSSBitmapTextGenerator.csproj.GenerateResource.cache
+C:\Users\sec\Documents\RGSSBitmapTextGenerator\obj\Release\RGSSBitmapTextGenerator.csproj.CoreCompileInputs.cache
+C:\Users\sec\Documents\RGSSBitmapTextGenerator\obj\Release\RGSSBitmapTextGenerator.csproj.CopyComplete
+C:\Users\sec\Documents\RGSSBitmapTextGenerator\obj\Release\RGSSBitmapTextGenerator.exe
+C:\Users\sec\Documents\RGSSBitmapTextGenerator\obj\Release\RGSSBitmapTextGenerator.pdb
