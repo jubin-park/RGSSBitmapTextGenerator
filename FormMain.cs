@@ -316,21 +316,22 @@ namespace RGSSBitmapTextGenerator
             {
                 return;
             }
+
             varFontName = Microsoft.VisualBasic.Interaction.InputBox("폰트 변수명을 입력하세요.", this.Text, varFontName);
             varBitmapName = Microsoft.VisualBasic.Interaction.InputBox("비트맵 변수명을 입력하세요.", this.Text, varBitmapName);
 
-            string sName = $@"""{fontDialogInfo.Font.Name}""";
-            string sSize = $"{Convert.ToInt32(fontDialogInfo.Font.Size + 0.5f)}";
-            string sBold = $"{fontDialogInfo.Font.Bold.ToString().ToLower()}";
-            string sItalic = $"{fontDialogInfo.Font.Italic.ToString().ToLower()}";
-            string sColor = $"({colorDialogFont.Color.R}, {colorDialogFont.Color.G}, {colorDialogFont.Color.B}";
-            if (numericUpDownAlpha.Value < 255)
+            string sName = $@"""{jsonObj["font_name"]}""";
+            string sSize = $"{jsonObj["font_size"]}";
+            string sBold = $"{jsonObj["font_bold"].ToString().ToLower()}";
+            string sItalic = $"{jsonObj["font_italic"].ToString().ToLower()}";
+            string sColor = $"({jsonObj["r"]}, {jsonObj["g"]}, {jsonObj["b"]}";
+            if ((int)jsonObj["a"] < 255)
             {
-                sColor += $", {numericUpDownAlpha.Value}";
+                sColor += $", {jsonObj["a"]}";
             }
             sColor += ")";
 
-            int intSize = (int)jsonObj["size"];
+            int intCount = (int)jsonObj["count"];
             int intWidth = (int)jsonObj["width"];
             int intHeight = (int)jsonObj["height"];
             int intAlign = (int)jsonObj["align_h"];
@@ -368,25 +369,26 @@ Font.default_color.set{sColor}
 ";
             string sDrawText = "";
             string sTextLength = "";
-            if (intSize > 0)
+
+            if (intCount > 0)
             {
                 JArray jArrayY = JArray.Parse(jsonObj["arr_y"].ToString());
                 JArray jArrayRect = JArray.Parse(jsonObj["arr_rect"].ToString());
-                string[] sStr = textBoxText.Text.Split(new string[] { "\r\n" }, StringSplitOptions.None);//.Replace("\r\n", "\n").Split('\n');
+                string[] sStr = textBoxText.Text.Split(new string[] { "\r\n" }, StringSplitOptions.None);
 
                 sDrawText = "# draw_text 메서드\n";
                 sTextLength = @"# 문자열 길이
 # ""<문자열>""
 # (너비, 높이)
 ";
-                for (int i = 0; i < intSize; ++i)
+                for (int i = 0; i < intCount; ++i)
                 {
                     if (sStr[i] == "")
                     {
                         continue;
                     }
                     {
-                        string s = $@"{varBitmapName}.draw_text(0, {jArrayY[i]}, {intWidth + 1}, {intHeight}, ""{sStr[i]}""";
+                        string s = $@"{varBitmapName}.draw_text(0, {jArrayY[i]}, {intWidth + 1}, {sSize}, ""{sStr[i]}""";
                         if (intAlign != 0)
                         {
                             s += $", {intAlign}";

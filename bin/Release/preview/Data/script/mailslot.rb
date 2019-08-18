@@ -106,7 +106,15 @@ module Mailslot
 					"height" => $preview.my_bitmap.height,
 					"align_h" => $preview.my_align_h,
 					"arr_rect" => BitmapTextPreview.get_arr_text_rect($preview.my_font, arr_text),
-					"size" => arr_text.size
+					"count" => arr_text.size,
+					"font_name" => $preview.my_font.name,
+					"font_size" => $preview.my_font.size,
+					"font_bold" => $preview.my_font.bold,
+					"font_italic" => $preview.my_font.italic,
+					"r" => $preview.my_font.color.red,
+					"g" => $preview.my_font.color.green,
+					"b" => $preview.my_font.color.blue,
+					"a" => $preview.my_font.color.alpha
 				}
 			)
 			Mailslot.send_byte(json)
